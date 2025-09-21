@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/calculator") //class level mapping of a url to a controller class
-public class calculatorController {
+public class CalculatorController {
 
     //http://localhost:8080/api/v1/calculator/add?num1=6.7&num2=1.3
     @GetMapping("/add/{num3}") //method level mapping of url to controller function
@@ -31,8 +31,7 @@ public class calculatorController {
         Double result = null;
         result  = calculatorDTO.getNum1() * calculatorDTO.getNum2()
                     * calculatorDTO.getNum3() * calculatorDTO.getNum4();
-        ResponseEntity<Double> responseEntity = new ResponseEntity<Double>(result, HttpStatus.CREATED);
-        return responseEntity;
+        return new ResponseEntity<Double>(result, HttpStatus.CREATED);
 
     }
 }

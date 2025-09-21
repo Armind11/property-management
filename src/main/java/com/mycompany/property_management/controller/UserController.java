@@ -2,7 +2,6 @@ package com.mycompany.property_management.controller;
 
 import com.mycompany.property_management.dto.UserDTO;
 import com.mycompany.property_management.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+
+    public UserController(UserService userService)
+    {
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody() UserDTO userDTO) {

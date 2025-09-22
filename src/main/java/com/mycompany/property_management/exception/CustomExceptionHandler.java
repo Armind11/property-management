@@ -1,5 +1,7 @@
 package com.mycompany.property_management.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,6 +14,8 @@ import java.util.List;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorModel>> handleValidationFields(MethodArgumentNotValidException manv){
 
@@ -20,6 +24,8 @@ public class CustomExceptionHandler {
         List<FieldError> fieldErrorList = manv.getBindingResult().getFieldErrors();
         for(FieldError fe: fieldErrorList)
         {
+            logger.debug("inside field validation: {} - {} ",fe.getField() ,fe.getDefaultMessage());
+            logger.info("inside field validation: {} - {} ",fe.getField() ,fe.getDefaultMessage());
             errorModel = new ErrorModel();
             errorModel.setCode(fe.getField());
             errorModel.setMessage(fe.getDefaultMessage());
@@ -31,6 +37,14 @@ public class CustomExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<List<ErrorModel>> handleBusinessException(BusinessException bex){
         System.out.println("Business Exception is thrown");
+        for(ErrorModel em : bex.getErrors())
+        {
+            logger.debug("BusinessException is thrown level-debug : {} - {} ",em.getCode() ,em.getMessage());
+            logger.info("BusinessException is thrown level-info :  {} - {} ",em.getCode() ,em.getMessage());
+            logger.warn("BusinessException is thrown - level-warn : {} - {} ",em.getCode() ,em.getMessage());
+            logger.error("BusinessException is thrown - level-error : {} - {} ",em.getCode() ,em.getMessage());
+        }
+
         return new ResponseEntity<List<ErrorModel>>(bex.getErrors(),HttpStatus.BAD_REQUEST);
     }
 }

@@ -2,10 +2,8 @@ package com.mycompany.property_management.controller;
 
 import com.mycompany.property_management.dto.PropertyDTO;
 import com.mycompany.property_management.service.PropertyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-public class propertyController {
+public class PropertyController {
 
     @Value("${pms.dummy:}")
     private String dummy;
@@ -21,8 +19,13 @@ public class propertyController {
     @Value("${spring.datasource.url:}")
     private String dbUrl;
 
-    @Autowired
-    private PropertyService propertyService;
+
+    private final PropertyService propertyService;
+
+    public PropertyController(PropertyService propertyService) {
+        this.propertyService = propertyService;
+    }
+
 
     @GetMapping("/hello")
     public String sayHello(){
@@ -34,17 +37,13 @@ public class propertyController {
 
         propertyDTO = propertyService.saveProperty(propertyDTO);
 
-        ResponseEntity<PropertyDTO> responseEntity = new ResponseEntity<>(propertyDTO, HttpStatus.CREATED);
-        return responseEntity;
+        return new ResponseEntity<>(propertyDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/properties")
     public ResponseEntity<List<PropertyDTO>> getAllProperties(){
-        System.out.println(dummy);
-        System.out.println(dbUrl);
         List<PropertyDTO> propertyList = propertyService.getAllProperties();
-        ResponseEntity<List<PropertyDTO>> responseEntity = new ResponseEntity<>(propertyList,HttpStatus.OK);
-        return responseEntity;
+        return new ResponseEntity<>(propertyList,HttpStatus.OK);
     }
 
     @PutMapping("/properties/{id}")
@@ -67,8 +66,8 @@ public class propertyController {
     }
 
     @DeleteMapping("/properties/delete-property/{id}")
-    public ResponseEntity<Void> DeleteProperty(@PathVariable Long id){
-        propertyService.DeleteProperty(id);
-        return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteProperty(@PathVariable Long id){
+        propertyService.deleteProperty(id);
+        return ResponseEntity.noContent().build();
     }
 }

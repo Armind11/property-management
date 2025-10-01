@@ -1,6 +1,8 @@
 package com.mycompany.property_management.controller;
 
 import com.mycompany.property_management.dto.PropertyDTO;
+import com.mycompany.property_management.entity.UserEntity;
+import com.mycompany.property_management.repository.UserRepository;
 import com.mycompany.property_management.service.PropertyService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -43,6 +46,13 @@ public class PropertyController {
     @GetMapping("/properties")
     public ResponseEntity<List<PropertyDTO>> getAllProperties(){
         List<PropertyDTO> propertyList = propertyService.getAllProperties();
+        return new ResponseEntity<>(propertyList,HttpStatus.OK);
+    }
+
+    @GetMapping("/properties/users/{userId}")
+    public ResponseEntity<List<PropertyDTO>> getAllPropertiesForUser(@PathVariable ("userId") Long userId){
+
+        List<PropertyDTO> propertyList = propertyService.getAllPropertiesForUser(userId);
         return new ResponseEntity<>(propertyList,HttpStatus.OK);
     }
 

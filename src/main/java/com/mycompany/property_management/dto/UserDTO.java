@@ -23,4 +23,10 @@ public class UserDTO {
     @NotNull(message = "Password Cannot Be Null")
     @NotEmpty(message = "Password Cannot Be Empty")
     private String password;
+
+    private String houseNo;
+    private String street;
+    private String city;
+    private String postalCode;
+    private String country;
 }

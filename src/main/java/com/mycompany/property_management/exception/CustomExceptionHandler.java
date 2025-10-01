@@ -36,7 +36,6 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<List<ErrorModel>> handleBusinessException(BusinessException bex){
-        System.out.println("Business Exception is thrown");
         for(ErrorModel em : bex.getErrors())
         {
             logger.debug("BusinessException is thrown level-debug : {} - {} ",em.getCode() ,em.getMessage());

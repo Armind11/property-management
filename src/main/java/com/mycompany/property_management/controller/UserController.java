@@ -2,6 +2,8 @@ package com.mycompany.property_management.controller;
 
 import com.mycompany.property_management.dto.UserDTO;
 import com.mycompany.property_management.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(description = "This Method is Used for User Registration")
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@Valid @RequestBody() UserDTO userDTO) {
+    public ResponseEntity<UserDTO> register(@Parameter(
+            name = "UserDTO",
+            example = "user Information",
+            required = true
+    ) @Valid @RequestBody() UserDTO userDTO) {
 
         userDTO = userService.register(userDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
